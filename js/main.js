@@ -46,7 +46,7 @@ const setUsers = {
     if(user && user.password === password){
       this.authorizedUser(user);
       handler();
-    }else{
+    } else {
       alert('Пользователь с такими данными не найден. Пройдите авторизацию!')
     }
   },
