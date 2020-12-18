@@ -17,6 +17,9 @@ const emailInput = document.querySelector('.login-email');
 const passwordInput = document.querySelector('.login-password');
 const loginSignup = document.querySelector('.login-signup');
 
+const userElem =  document.querySelector('.user');
+const userNameElem = document.querySelector('.user-name');
+
 //создаем массив  с двумя пользователями для входа
 //!!! потом изменяем на свои данные
 //добавляем id для базы данных
@@ -38,22 +41,34 @@ const listUsers = [
 //объект для работы с базой данных
 const setUsers = {
   user: null,
-  logIn(email, password) {
-    console.log(email, password)
+  logIn(email, password, handler) {
+    const user = this.getUser(email);
+    if(user && user.password === password){
+      this.authorizedUser(user);
+      handler();
+    }else{
+      alert('Пользователь с такими данными не найден!')
+    }
   },
   logOut() {
     console.log('выход')
   },
-  signUp(email, password) {
+  signUp(email, password, handler) {
     if (!this.getUser(email)){
-      listUsers.push({email, password, displayName: email})
-      console.log(listUsers);
-    }else{
+      const user = {email, password, displayName: email};
+      listUsers.push(user);
+      this.authorizedUser(user);
+      handler();
+    }  else {
       alert('Пользователь с таким email уже зарегистрирован! Введите другой email')
     }
+    
   },
   getUser(email){
     return listUsers.find(item => item.email === email)
+  },
+  authorizedUser(user) {
+    this.user = user;
   }
 };
 
@@ -63,6 +78,23 @@ const setUsers = {
 //setUsers.signIn();
 //setUsers.logOut();
 
+const toggleAuthDom = () => {
+  const user = setUsers.user;
+  console.log('user: ', user);
+
+  if (user) {
+    loginElem.style.display = 'none';
+    userElem.style.display = '';
+    userNameElem.textContent = user.displayName;
+  } else {
+    loginElem.style.display = '';
+    userElem.style.display = 'none';
+  }
+};
+
+
+
+
 //выводим в консоли события при нажатии на кнопку или enter
 //для этого вводим наш пароль и почту(выше создали)
 //console.log(event) внутри функции
@@ -71,22 +103,24 @@ const setUsers = {
 loginForm.addEventListener('submit', event => {
   event.preventDefault();
   
-  const emailValue = emailInput.value;
-  const passwordValue = passwordInput.value;
+  const emailValue = emailInput.value.trim();
+  const passwordValue = passwordInput.value.trim();
   
-  setUsers.logIn(emailValue, passwordValue);
+  setUsers.logIn(emailValue, passwordValue, toggleAuthDom);
+  
 });
 
 //метод регистрация
 loginSignup.addEventListener('click', event => {
   event.preventDefault();
 
-  const emailValue = emailInput.value;
-  const passwordValue = passwordInput.value;
+  const emailValue = emailInput.value.trim();
+  const passwordValue = passwordInput.value.trim();
 
 
-  setUsers.signUp(emailValue, passwordValue);
+  setUsers.signUp(emailValue, passwordValue, toggleAuthDom)
+  
 });
 
-
+toggleAuthDom();
 
