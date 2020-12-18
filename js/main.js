@@ -47,7 +47,7 @@ const setUsers = {
       this.authorizedUser(user);
       handler();
     }else{
-      alert('Пользователь с такими данными не найден!')
+      alert('Пользователь с такими данными не найден. Пройдите авторизацию!')
     }
   },
   logOut() {
