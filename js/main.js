@@ -54,6 +54,12 @@ const setUsers = {
     console.log('выход')
   },
   signUp(email, password, handler) {
+
+    if(!email.trim() || !password.trim()) {
+      alert('Введите данные!')
+      return;
+    }
+
     if (!this.getUser(email)){
       const user = {email, password, displayName: email};
       listUsers.push(user);
@@ -107,7 +113,7 @@ loginForm.addEventListener('submit', event => {
   const passwordValue = passwordInput.value.trim();
   
   setUsers.logIn(emailValue, passwordValue, toggleAuthDom);
-  
+  loginForm.reset();
 });
 
 //метод регистрация
@@ -119,7 +125,7 @@ loginSignup.addEventListener('click', event => {
 
 
   setUsers.signUp(emailValue, passwordValue, toggleAuthDom)
-  
+  loginForm.reset();
 });
 
 toggleAuthDom();
