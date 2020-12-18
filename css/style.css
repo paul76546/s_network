@@ -218,7 +218,12 @@ body {
   border: 1px solid #e8e8e8;
   padding: 5px 15px;
   margin-bottom: 15px;
+  transition: all 0.5s easy 0s;
  }
+
+.login-input:focus {
+  box-shadow: 0 0 10px rgb(3, 153, 3);
+}
 
  .login-forget {
    text-align: center;
@@ -239,7 +244,7 @@ body {
   margin-bottom: 15px;
  }
 
- .login-signin:hover {
+.login-signin:hover {
    filter: opacity(80%);
 }
 
