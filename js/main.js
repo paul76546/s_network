@@ -10,7 +10,9 @@ menuToggle.addEventListener('click', function (event) {
   menu.classList.toggle('visible');
 })
 
-const regExpValidEmail = /^\w{3,100}@\w+\.\w{2,}$/;
+//const regExpValidEmail = /^\w{3,100}@\w+\.\w{2,}$/;
+
+const regExpValidEmail = /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/igm
 
 const loginElem = document.querySelector('.login');
  //console.log(loginElem);
