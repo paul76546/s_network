@@ -202,14 +202,14 @@
               minlength="3"
               required
               placeholder="Введите email">
-
+            <!--надо добавлять <div class="errors" style="height: 20px; color: red"></div> -->
             <input type="password" 
               class="login-input login-password"
               name="password"
               minlength="3"
               required
               placeholder="Введите пароль">
-
+            <!--надо добавлять <div class="errors" style="height: 20px; color: red"></div> -->
             <a href="#" class="login-forget">Забыли пароль?</a>
         
             <button class="login-signin" type="submit" >Войти</button>
@@ -221,24 +221,24 @@
 
       </div>
 
-      <div class="user">
-        <div class="user-container">
-         <a href="#" class="user-info">
-           <img width="40" height="40" src="img/avatar.jpeg" alt="photo: user" class="user-avatar">
-           <span class="user-name">islamovartem</span>
-         </a>
+    <div class="user">
+      <div class="user-container">
+        <a href="#" class="user-info">
+          <img width="40" height="40" src="img/avatar.jpeg" alt="photo: user" class="user-avatar">
+          <span class="user-name">islamovartem</span>
+        </a>
 
-         <a href="#" class="edit">
-           <img class="icon icon-edit" src="img/edit.svg" alt="редактировать">
-         </a>
+        <a href="#" class="edit">
+          <img class="icon icon-edit" src="img/edit.svg" alt="редактировать">
+        </a>
 
-        <!-- /.user-info -->
-         <a href="#" class="exit">
-           <svg class="icon icon-exit">
-             <use xlink:href="img/icons.svg#exit"></use>
-           </svg>
-         </a>
-        </div>
+      <!-- /.user-info -->
+        <a href="#" class="exit">
+          <svg class="icon icon-exit">
+            <use xlink:href="img/icons.svg#exit"></use>
+          </svg>
+        </a>
+    </div>
 
         <form class="edit-container">
           <h2 class="edit-title">Редактировать</h2>
@@ -248,14 +248,14 @@
               class="edit-input edit-username"
               name="username"
               minlength="3"
-              placeholder="логин">
+              placeholder="логин"
+              required>
             </label>
 
             <label class="edit-label">Ваше фото
               <input type="text" 
               class="edit-input edit-photo"
               name="photo"
-              minlength="3"
               placeholder="URL_photo">
             </label>
 

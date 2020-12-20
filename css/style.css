@@ -205,36 +205,36 @@ body {
 }
 
 .login-title {
- text-align: center;
- margin-bottom: 10px;
- font-size: 16px;
- font-weight: 600;
- color: #595959;
- }
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #595959;
+}
 
- .login-input {
+.login-input {
   display: block;
   background-color: #fff;
   border: 1px solid #e8e8e8;
   padding: 5px 15px;
   margin-bottom: 15px;
   transition: all 0.5s easy 0s;
- }
+}
 
 .login-input:focus {
   box-shadow: 0 0 10px rgb(3, 153, 3);
 }
 
- .login-forget {
-   text-align: center;
-   font-family: 12px;
-   text-decoration: none;
-   color:royalblue ;
-   margin-bottom: 10px;
-   font-style: italic;
- }
+.login-forget {
+  text-align: center;
+  font-family: 12px;
+  text-decoration: none;
+  color:royalblue ;
+  margin-bottom: 10px;
+  font-style: italic;
+}
 
- .login-signin {
+.login-signin {
   background-color: #fa8c16;
   border: none;
   border-radius: 2px;
@@ -242,10 +242,10 @@ body {
   cursor: pointer;
   line-height: 32px;
   margin-bottom: 15px;
- }
+}
 
 .login-signin:hover {
-   filter: opacity(80%);
+filter: opacity(80%);
 }
 
 .login-signin:active {
@@ -292,6 +292,14 @@ body {
 .edit {
   margin-right: 15px;
 }
+.edit-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #595959;
+}
+
 .edit-container {
   display: none;
 }

@@ -10,6 +10,8 @@ menuToggle.addEventListener('click', function (event) {
   menu.classList.toggle('visible');
 })
 
+const regExpValidEmail = /^\w{3,100}@\w+\.\w{2,}$/;
+
 const loginElem = document.querySelector('.login');
  //console.log(loginElem);
 const loginForm = document.querySelector('.login-form');
@@ -20,6 +22,13 @@ const loginSignup = document.querySelector('.login-signup');
 const userElem =  document.querySelector('.user');
 const userNameElem = document.querySelector('.user-name');
 
+const exitElem = document.querySelector('.exit');
+const editElem = document.querySelector('.edit');
+const editContainer = document.querySelector('.edit-container');
+
+const editUsername = document.querySelector('.edit-username');
+const editPhotoURL = document.querySelector('.edit-photo');
+const userAvatarElem = document.querySelector(".user-avatar");
 //создаем массив  с двумя пользователями для входа
 //!!! потом изменяем на свои данные
 //добавляем id для базы данных
@@ -42,19 +51,28 @@ const listUsers = [
 const setUsers = {
   user: null,
   logIn(email, password, handler) {
+    if(!regExpValidEmail.test(email)){
+    alert('email не корректный!');
+    return;
+  }
     const user = this.getUser(email);
-    if(user && user.password === password){
+    if(user && user.password === password) {
       this.authorizedUser(user);
       handler();
     } else {
       alert('Пользователь с такими данными не найден. Пройдите авторизацию!')
     }
   },
-  logOut() {
-    console.log('выход')
+  logOut(handler) {
+    //console.log('выход')
+    this.user = null;
+    handler();
   },
   signUp(email, password, handler) {
-
+    if(!regExpValidEmail.test(email)) {
+      alert('email не корректный!');
+      return;
+    }
     if(!email.trim() || !password.trim()) {
       alert('Введите данные!')
       return;
@@ -70,6 +88,16 @@ const setUsers = {
     }
     
   },
+  editUser(userName, userPhoto, handler) {
+    if(userName) {
+      this.user.displayName = userName;
+    }
+    if(userPhoto) {
+      this.user.photo = userPhoto;
+    }
+    handler();
+  },
+
   getUser(email){
     return listUsers.find(item => item.email === email)
   },
@@ -92,6 +120,7 @@ const toggleAuthDom = () => {
     loginElem.style.display = 'none';
     userElem.style.display = '';
     userNameElem.textContent = user.displayName;
+    userAvatarElem.src = user.photo ? user.photo : userAvatarElem.src;
   } else {
     loginElem.style.display = '';
     userElem.style.display = 'none';
@@ -126,6 +155,22 @@ loginSignup.addEventListener('click', event => {
 
   setUsers.signUp(emailValue, passwordValue, toggleAuthDom)
   loginForm.reset();
+});
+
+exitElem.addEventListener('click', event => {
+event.preventDefault();
+setUsers.logOut(toggleAuthDom);
+
+});
+
+editElem.addEventListener('click', event => {
+  event.preventDefault();
+  editContainer.classList.toggle('visible');
+});
+
+editContainer.addEventListener('click', event => {
+  event.preventDefault();
+  setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
 });
 
 toggleAuthDom();
