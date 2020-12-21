@@ -81,7 +81,7 @@ const setUsers = {
     }
 
     if (!this.getUser(email)){
-      const user = {email, password, displayName: email};
+      const user = {email, password, displayName: email.substring(0, email.indexOf('@'))};
       listUsers.push(user);
       this.authorizedUser(user);
       handler();
@@ -168,11 +168,13 @@ setUsers.logOut(toggleAuthDom);
 editElem.addEventListener('click', event => {
   event.preventDefault();
   editContainer.classList.toggle('visible');
+  editUsername.value = setUsers.user.displayName;
 });
 
-editContainer.addEventListener('click', event => {
+editContainer.addEventListener('submit', event => {
   event.preventDefault();
   setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
+  editContainer.classList.remove('visible');
 });
 
 toggleAuthDom();
