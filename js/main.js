@@ -2,13 +2,7 @@
 let menuToggle = document.querySelector('#menu-toggle');
 // Создаем переменную, в которую положим меню
 let menu = document.querySelector('.sidebar');
-// отслеживаем клик по кнопке меню и запускаем функцию 
-menuToggle.addEventListener('click', function (event) {
-  // отменяем стандартное поведение ссылки
-  event.preventDefault();
-  // вешаем класс на меню, когда кликнули по кнопке меню 
-  menu.classList.toggle('visible');
-})
+
 
 //const regExpValidEmail = /^\w{3,100}@\w+\.\w{2,}$/;
 
@@ -31,6 +25,11 @@ const editContainer = document.querySelector('.edit-container');
 const editUsername = document.querySelector('.edit-username');
 const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector(".user-avatar");
+
+const postsWrapper = document.querySelector('.posts');
+
+
+
 //создаем массив  с двумя пользователями для входа
 //!!! потом изменяем на свои данные
 //добавляем id для базы данных
@@ -114,6 +113,33 @@ const setUsers = {
 //setUsers.signIn();
 //setUsers.logOut();
 
+const setPosts = {
+allPosts: [
+  {
+    title: 'Заголовок поста',
+    text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
+    tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
+    author: 'maks@mail.com',
+    date: '11.11.2020, 20:54:00',
+    like: 15,
+    comments: 20,
+  },
+  {
+    title: 'Заголовок поста2',
+    text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
+    tags: ['свежее', 'новое', 'мое', 'случайность'],
+    author: 'kate@mail.com',
+    date: '10.11.2020, 20:54:00',
+    like: 45,
+    comments: 12,
+  }
+
+]
+
+
+
+};
+
 const toggleAuthDom = () => {
   const user = setUsers.user;
   console.log('user: ', user);
@@ -137,45 +163,76 @@ const toggleAuthDom = () => {
 //console.log(event) внутри функции
 //метод вход
 //получаем значения почты и пароля
-loginForm.addEventListener('submit', event => {
-  event.preventDefault();
+
+
+
+const showAllPosts = () => {
+  let postsHTML = '';
+
+  setPosts.allPosts.forEach((post, i, arr) => {
+    //console.log(post, i, arr);
+    
+  })
   
-  const emailValue = emailInput.value.trim();
-  const passwordValue = passwordInput.value.trim();
+  postsWrapper.innerHTML = 'ТУТ МОГЛА БЫТЬ ВАША РЕКЛАМА!'
+};
+
+const init = () => {
+
+  loginForm.addEventListener('submit', event => {
+    event.preventDefault();
+    
+    const emailValue = emailInput.value.trim();
+    const passwordValue = passwordInput.value.trim();
+    
+    setUsers.logIn(emailValue, passwordValue, toggleAuthDom);
+    loginForm.reset();
+  });
   
-  setUsers.logIn(emailValue, passwordValue, toggleAuthDom);
-  loginForm.reset();
-});
-
-//метод регистрация
-loginSignup.addEventListener('click', event => {
+  //метод регистрация
+  loginSignup.addEventListener('click', event => {
+    event.preventDefault();
+  
+    const emailValue = emailInput.value.trim();
+    const passwordValue = passwordInput.value.trim();
+  
+  
+    setUsers.signUp(emailValue, passwordValue, toggleAuthDom)
+    loginForm.reset();
+  });
+  
+  exitElem.addEventListener('click', event => {
   event.preventDefault();
-
-  const emailValue = emailInput.value.trim();
-  const passwordValue = passwordInput.value.trim();
-
-
-  setUsers.signUp(emailValue, passwordValue, toggleAuthDom)
-  loginForm.reset();
-});
-
-exitElem.addEventListener('click', event => {
-event.preventDefault();
-setUsers.logOut(toggleAuthDom);
-
-});
-
-editElem.addEventListener('click', event => {
+  setUsers.logOut(toggleAuthDom);
+  
+  });
+  
+  editElem.addEventListener('click', event => {
+    event.preventDefault();
+    editContainer.classList.toggle('visible');
+    editUsername.value = setUsers.user.displayName;
+  });
+  
+  editContainer.addEventListener('submit', event => {
+    event.preventDefault();
+    setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
+    editContainer.classList.remove('visible');
+  });
+// отслеживаем клик по кнопке меню и запускаем функцию 
+menuToggle.addEventListener('click', function (event) {
+  // отменяем стандартное поведение ссылки
   event.preventDefault();
-  editContainer.classList.toggle('visible');
-  editUsername.value = setUsers.user.displayName;
+  // вешаем класс на меню, когда кликнули по кнопке меню 
+  menu.classList.toggle('visible');
 });
 
-editContainer.addEventListener('submit', event => {
-  event.preventDefault();
-  setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
-  editContainer.classList.remove('visible');
-});
+  showAllPosts();
+  toggleAuthDom();
+}
 
-toggleAuthDom();
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+})
+
+
 
