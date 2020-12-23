@@ -119,7 +119,7 @@ allPosts: [
     title: 'Заголовок поста',
     text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
     tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-    author: 'maks@mail.com',
+    author: {displayName: 'make', photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'},
     date: '11.11.2020, 20:54:00',
     like: 15,
     comments: 20,
@@ -128,7 +128,7 @@ allPosts: [
     title: 'Заголовок поста2',
     text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
     tags: ['свежее', 'новое', 'мое', 'случайность'],
-    author: 'kate@mail.com',
+    author: {displayName: 'Kate', photo: 'https://mp3klab.ru/img.php?aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9aTUV1cGIxMl82WS9ocWRlZmF1bHQuanBn.jpg'},
     date: '10.11.2020, 20:54:00',
     like: 45,
     comments: 12,
@@ -137,7 +137,7 @@ allPosts: [
     title: 'Заголовок поста3',
     text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
     tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-    author: 'maks@mail.com',
+    author: {displayName: 'make', photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'},
     date: '11.11.2020, 20:54:00',
     like: 15,
     comments: 20,
@@ -180,7 +180,7 @@ const showAllPosts = () => {
 
 
 
-  setPosts.allPosts.forEach(({title, text, date}) => {
+  setPosts.allPosts.forEach(({title, text, date, tags, like, comments,author }) => {
 
 
 
@@ -190,7 +190,8 @@ const showAllPosts = () => {
           <h2 class="post-title">${title}</h2>
           <p class="post-text">${text}</p>
           <div class="tags">
-            <a href="#" class="tag">#свежее</a>
+            ${tags.map(tag => `<a href='#' class='tag'>#${tag}</a>`)}
+          <a href="#" class="tag">#свежее</a>
           </div>
         </div>
         <div class="post-footer">
@@ -199,13 +200,13 @@ const showAllPosts = () => {
               <svg width="19" height="20" class="icon icon-like">
                 <use xlink:href="img/icons.svg#like"></use>
               </svg>
-              <span class="likes-counter">26</span>
+              <span class="likes-counter">${like}</span>
             </button>
             <button class="post-button comments">
               <svg width="21" height="21" class="icon icon-comment">
                 <use xlink:href="img/icons.svg#comment"></use>
               </svg>
-              <span class="comments-counter">157</span>
+              <span class="comments-counter">${comments}</span>
             </button>
             <button class="post-button save">
               <svg width="19" height="19" class="icon icon-save">
@@ -220,10 +221,10 @@ const showAllPosts = () => {
           </div>
           <div class="post-author">
             <div class="author-about">
-              <a href="#" class="author-username">arteislamov</a>
+              <a href="#" class="author-username">${author.displayName}</a>
               <span class="post-time">${date}</span>
             </div>
-            <a href="#" class="author-link"><img src="img/avatar.jpeg" alt="avatar" class="author-avatar"></a>
+            <a href="#" class="author-link"><img src=${author.photo || "img/avatar.jpeg"} alt="avatar" class="author-avatar"></a>
           </div>
         </div>
       </section>
