@@ -27,7 +27,7 @@ const editPhotoURL = document.querySelector('.edit-photo');
 const userAvatarElem = document.querySelector(".user-avatar");
 
 const postsWrapper = document.querySelector('.posts');
-
+const buttonNewPost = document.querySelector('.button-new-post');
 
 
 //создаем массив  с двумя пользователями для входа
@@ -158,9 +158,11 @@ const toggleAuthDom = () => {
     userElem.style.display = '';
     userNameElem.textContent = user.displayName;
     userAvatarElem.src = user.photo ? user.photo : userAvatarElem.src;
+    buttonNewPost.classList.add('visible');
   } else {
     loginElem.style.display = '';
     userElem.style.display = 'none';
+    buttonNewPost.classList.remove('visible');
   }
 };
 

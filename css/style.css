@@ -95,7 +95,11 @@ body {
   justify-content: space-between;
 }
 .posts {
+  display: none;
   width: 67%;
+}
+.posts.visible {
+  display: block;
 }
 .post {
   background-color: #fff;
@@ -123,6 +127,7 @@ body {
 }
 .tags {
   margin-bottom: 22px;
+  color: #bfbfbf;
 }
 .tag {
   color: #bfbfbf;
@@ -406,6 +411,9 @@ filter: opacity(80%);
   width: 100%;
   margin-top: 20px;
 }
+.button-new-post.visible {
+  display: flex;
+}
 .icon-fire {
   fill: #fff;
   width: 11px;
@@ -473,8 +481,12 @@ filter: opacity(80%);
   color: #ffffff;
 }
 .add-post {
-  display: flex;
+  display: none;
   flex-direction: column;
+  width: 67%;
+}
+.add-post.visible {
+  display: flex;
 }
 .add-title,
 .add-text {
