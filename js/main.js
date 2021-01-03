@@ -220,7 +220,7 @@ const showAllPosts = () => {
           <h2 class="post-title">${title}</h2>
           <p class="post-text">${text}</p>
           <div class="tags">
-            ${tags.map(tag => `<a href='#' class='tag'>#${tag}</a>`)}
+            ${tags.map(tag => `<a href='#${tag}' class='tag'>#${tag}</a>`)}
           </div>
         </div>
         <div class="post-footer">
