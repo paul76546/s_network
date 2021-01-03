@@ -489,11 +489,13 @@ filter: opacity(80%);
   display: flex;
 }
 .add-title,
-.add-text {
+.add-text,
+.add-tags {
   background: #ffffff;
   border: 1px solid #e8e8e8;
   padding: 23px 30px;
   margin-bottom: 16px;
+  resize: none;
 }
 .add-text {
   min-height: 362px;

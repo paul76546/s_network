@@ -28,6 +28,7 @@ const userAvatarElem = document.querySelector(".user-avatar");
 
 const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
+const addPostElem = document.querySelector('.add-post');
 
 
 //создаем массив  с двумя пользователями для входа
@@ -38,13 +39,15 @@ const listUsers = [
     id: '01',
     email: 'maks@mail.ru',
     password: '12345',
-    displayName: 'MaksJS'
+    displayName: 'Maks',
+    photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'
   },
   {
     id: '02',
     email: 'kate@mail.com',
     password: '123456',
-    displayName: 'KateKillMaks'
+    displayName: 'Kate',
+    photo: 'https://mp3klab.ru/img.php?aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9aTUV1cGIxMl82WS9ocWRlZmF1bHQuanBn.jpg'
   }
 ];
 
@@ -59,7 +62,10 @@ const setUsers = {
     const user = this.getUser(email);
     if(user && user.password === password) {
       this.authorizedUser(user);
-      handler();
+      if(handler){
+        handler();
+      }
+      
     } else {
       alert('Пользователь с такими данными не найден. Пройдите авторизацию!')
     }
@@ -67,7 +73,10 @@ const setUsers = {
   logOut(handler) {
     //console.log('выход')
     this.user = null;
-    handler();
+    if(handler) {
+      handler();
+    }
+    
   },
   signUp(email, password, handler) {
     if(!regExpValidEmail.test(email)) {
@@ -83,8 +92,10 @@ const setUsers = {
       const user = {email, password, displayName: email.substring(0, email.indexOf('@'))};
       listUsers.push(user);
       this.authorizedUser(user);
-      handler();
-    }  else {
+      if(handler) {
+        handler();
+      } 
+    } else {
       alert('Пользователь с таким email уже зарегистрирован! Введите другой email')
     }
     
@@ -142,8 +153,27 @@ allPosts: [
     like: 15,
     comments: 20,
   }
+],
+addPost(title, text, tags, handler) {
 
-]
+  this.allPosts.unshift({
+    title,
+    text,
+    tags: tags.split(',').map(item => item.trim()),
+    author: {
+      displayName:setUsers.user.displayName,
+      photo: setUsers.user.photo,
+    },
+    date: new Date().toLocaleString(),
+    like: 0,
+    comments: 0,
+
+  })
+  
+  if(handler) {
+    handler();
+  }
+}
 
 
 
@@ -163,28 +193,26 @@ const toggleAuthDom = () => {
     loginElem.style.display = '';
     userElem.style.display = 'none';
     buttonNewPost.classList.remove('visible');
+    addPostElem.classList.remove('visible');
+    postsWrapper.classList.add('visible');
   }
 };
 
+const showAddPost = () => {
+  addPostElem.classList.add('visible');
+  postsWrapper.classList.remove('visible');
+}
 
 
 
-//выводим в консоли события при нажатии на кнопку или enter
-//для этого вводим наш пароль и почту(выше создали)
-//console.log(event) внутри функции
-//метод вход
-//получаем значения почты и пароля
 
 
 
 const showAllPosts = () => {
+  
   let postsHTML = '';
 
-
-
   setPosts.allPosts.forEach(({title, text, date, tags, like, comments,author }) => {
-
-
 
     postsHTML += `
     <section class="post">
@@ -193,7 +221,6 @@ const showAllPosts = () => {
           <p class="post-text">${text}</p>
           <div class="tags">
             ${tags.map(tag => `<a href='#' class='tag'>#${tag}</a>`)}
-          <a href="#" class="tag">#свежее</a>
           </div>
         </div>
         <div class="post-footer">
@@ -235,8 +262,17 @@ const showAllPosts = () => {
   })
   
   postsWrapper.innerHTML = postsHTML;
+
+  addPostElem.classList.remove('visible');
+  postsWrapper.classList.add('visible');
 };
 
+
+//выводим в консоли события при нажатии на кнопку или enter
+//для этого вводим наш пароль и почту(выше создали)
+//console.log(event) внутри функции
+//метод вход
+//получаем значения почты и пароля
 const init = () => {
 
   loginForm.addEventListener('submit', event => {
@@ -277,14 +313,36 @@ const init = () => {
     event.preventDefault();
     setUsers.editUser(editUsername.value, editPhotoURL.value, toggleAuthDom);
     editContainer.classList.remove('visible');
-  });
+  })
 // отслеживаем клик по кнопке меню и запускаем функцию 
 menuToggle.addEventListener('click', function (event) {
   // отменяем стандартное поведение ссылки
-  event.preventDefault();
+   event.preventDefault();
   // вешаем класс на меню, когда кликнули по кнопке меню 
-  menu.classList.toggle('visible');
-});
+   menu.classList.toggle('visible');
+})
+
+  buttonNewPost.addEventListener('click', event => {
+    event.preventDefault();
+    showAddPost();
+  });
+
+  addPostElem.addEventListener('submit', event => {
+    event.preventDefault();
+    const { title, text, tags } = addPostElem.elements;
+    if(title.value.length<6){
+      alert('Слишком короткий заголовок');
+      return;
+    }
+    if(text.value.length<50){
+      alert('Слишком короткий пост');
+      return;
+    }
+    setPosts.addPost(title.value, text.value, tags.value, showAllPosts);
+    addPostElem.classList.remove('visible');
+    addPostElem.reset();
+    
+  });
 
   showAllPosts();
   toggleAuthDom();
