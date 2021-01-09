@@ -212,7 +212,7 @@ const showAllPosts = () => {
   
   let postsHTML = '';
 
-  setPosts.allPosts.forEach(({title, text, date, tags, like, comments,author }) => {
+  setPosts.allPosts.forEach(({ title, text, date, tags, like, comments, author }) => {
 
     postsHTML += `
     <section class="post">
@@ -220,7 +220,7 @@ const showAllPosts = () => {
           <h2 class="post-title">${title}</h2>
           <p class="post-text">${text}</p>
           <div class="tags">
-            ${tags.map(tag => `<a href='#${tag}' class='tag'>#${tag}</a>`)}
+            ${tags.map(tag => `<a href="#${tag}" class="tag">#${tag}</a>`)}
           </div>
         </div>
         <div class="post-footer">
