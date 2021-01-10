@@ -2,20 +2,20 @@
 border: 1px solid black;
 width: 600px;
 margin: 30px auto;
-height: 550px;
+height: 520px;
 position: relative;
 }
 
 .infinity-slider {
     width: 600px;
-    height: 550px;
+    height: 520px;
     overflow: hidden;
     position: relative;
 }
 
 .infinity-slider img {
     width: 600px;
-    height: 550px;
+    height: 520px;
     position: absolute;
     opacity: 1;
     transition: all ease 1s;
