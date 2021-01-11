@@ -1,21 +1,21 @@
 .wrapper {
 border: 1px solid black;
-width: 600px;
+width: 700px;
 margin: 30px auto;
-height: 520px;
+height: 700px;
 position: relative;
 }
 
 .infinity-slider {
-    width: 600px;
-    height: 520px;
+    width: 700px;
+    height: 700px;
     overflow: hidden;
     position: relative;
 }
 
 .infinity-slider img {
-    width: 600px;
-    height: 520px;
+    width: 700px;
+    height: 700px;
     object-fit: cover;
     object-position: center;
     position: absolute;
