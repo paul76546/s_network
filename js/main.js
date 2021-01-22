@@ -1,3 +1,17 @@
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCmGHty1uY9KvkV3t4IUSKJsR6y8IzFLMo",
+  authDomain: "my-big-family-77d2d.firebaseapp.com",
+  projectId: "my-big-family-77d2d",
+  storageBucket: "my-big-family-77d2d.appspot.com",
+  messagingSenderId: "215093759713",
+  appId: "1:215093759713:web:d3b2f4855b5e38874e71a0"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+//console.log('firebase: ', firebase);
+
+
 // Создаем переменную, в которую положим кнопку меню
 let menuToggle = document.querySelector('#menu-toggle');
 // Создаем переменную, в которую положим меню
@@ -30,54 +44,91 @@ const postsWrapper = document.querySelector('.posts');
 const buttonNewPost = document.querySelector('.button-new-post');
 const addPostElem = document.querySelector('.add-post');
 
+const defaultPhoto = userAvatarElem.src;
 
 //создаем массив  с двумя пользователями для входа
 //!!! потом изменяем на свои данные
 //добавляем id для базы данных
-const listUsers = [
-  {
-    id: '01',
-    email: 'maks@mail.ru',
-    password: '12345',
-    displayName: 'Maks',
-    photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'
-  },
-  {
-    id: '02',
-    email: 'kate@mail.com',
-    password: '123456',
-    displayName: 'Kate',
-    photo: 'https://mp3klab.ru/img.php?aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9aTUV1cGIxMl82WS9ocWRlZmF1bHQuanBn.jpg'
-  }
-];
+//const listUsers = [
+//  {
+//    id: '01',
+//    email: 'maks@mail.ru',
+//    password: '12345',
+//    displayName: 'Maks',
+//    photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'
+//  },
+//  {
+//    id: '02',
+//    email: 'kate@mail.com',
+//    password: '123456',
+//    displayName: 'Kate',
+//    photo: 'https://mp3klab.ru/img.php?aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9aTUV1cGIxMl82WS9ocWRlZmF1bHQuanBn.jpg'
+//  }
+//];
 
 //объект для работы с базой данных
 const setUsers = {
   user: null,
+  initUser(handler) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        this.user = user;
+        
+      } else {
+        // User is signed out
+        this.user = null;
+      }
+      if(handler) handler();
+    })
+  },
   logIn(email, password, handler) {
     if(!regExpValidEmail.test(email)){
     alert('email не корректный!');
     return;
   }
-    const user = this.getUser(email);
-    if(user && user.password === password) {
-      this.authorizedUser(user);
-      if(handler){
-        handler();
-      }
-      
+
+  firebase.auth().signInWithEmailAndPassword(email, password)
+  .catch(err => {
+    const errCode = err.code;
+    const errMessage = err.message;
+    if (errCode === 'auth/wrong-password') {
+      console.log(errMessage);
+      alert('Неверный пароль!')
+    } else if (errCode === 'auth/user-not-found') {
+      console.log(errMessage);
+      alert('Пользователь не зарегистрирован!')
+
     } else {
-      alert('Пользователь с такими данными не найден. Пройдите авторизацию!')
+      alert(errMessage)
     }
+  })
+    //const user = this.getUser(email);
+    //if(user && user.password === password) {
+    //  this.authorizedUser(user);
+    //  if(handler){
+    //    handler();
+    //  }
+    //  
+    //} else {
+    //  alert('Пользователь с такими данными не найден. Пройдите авторизацию!')
+    //}
   },
-  logOut(handler) {
+  logOut() {
     //console.log('выход')
-    this.user = null;
-    if(handler) {
-      handler();
-    }
-    
-  },
+    firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+      console.log('Sign-out successful');
+    }).catch((error) => {
+      // An error happened.
+      console.log('An error happened.');
+    });
+    //this.user = null;
+    //if(handler) {
+    //  handler();
+    //}
+    },
   signUp(email, password, handler) {
     if(!regExpValidEmail.test(email)) {
       alert('email не корректный!');
@@ -88,34 +139,65 @@ const setUsers = {
       return;
     }
 
-    if (!this.getUser(email)){
-      const user = {email, password, displayName: email.substring(0, email.indexOf('@'))};
-      listUsers.push(user);
-      this.authorizedUser(user);
-      if(handler) {
-        handler();
-      } 
+firebase.auth()
+  .createUserWithEmailAndPassword(email, password)
+  .then(data => {
+    // Signed in 
+    this.editUser(email.substring(0, email.indexOf('@')), null, handler)
+  })
+  .catch((err) => {
+    const errCode = err.code;
+    const errMessage = err.message;
+    if (errCode === 'auth/weak-password') {
+      console.log(errMessage);
+      alert('Пароль должен быть более 6 знаков!')
+    } else if (errCode === 'auth/email-alredy-in-use') {
+      console.log(errMessage);
+      alert('Этот email уже используется!')
+
     } else {
-      alert('Пользователь с таким email уже зарегистрирован! Введите другой email')
+      alert(errMessage)
     }
+
+    console.log(err);
+  });
+
+    //if (!this.getUser(email)){
+    //  const user = {email, password, displayName: email.substring(0, email.indexOf('@'))};
+    //  listUsers.push(user);
+    //  this.authorizedUser(user);
+    //  if(handler) {
+    //    handler();
+    //  } 
+    //} else {
+    //  alert('Пользователь с таким email уже зарегистрирован! Введите другой email')
+    //}
     
   },
-  editUser(userName, userPhoto, handler) {
-    if(userName) {
-      this.user.displayName = userName;
+  editUser(displayName, photoURL, handler) {
+
+    const user = firebase.auth().currentUser;
+
+    if(displayName) {
+      if(photoURL) {
+        user.updateProfile({
+          displayName,
+          photoURL
+        }).then(handler)
+      } else {
+        user.updateProfile({
+          displayName
+        }).then(handler)
+      }
     }
-    if(userPhoto) {
-      this.user.photo = userPhoto;
-    }
-    handler();
   },
 
-  getUser(email){
-    return listUsers.find(item => item.email === email)
-  },
-  authorizedUser(user) {
-    this.user = user;
-  }
+//  //getUser(email){
+  //  return listUsers.find(item => item.email === email)
+  //},
+  //authorizedUser(user) {
+  //  this.user = user;
+  //}
 };
 
 //функция входа будет в консоли 'вход',если вызвать фукциювыхода будет выход и т.д.
@@ -129,25 +211,7 @@ allPosts: [
   {
     title: 'После Рождества в аккурат 11/01/2021',
     text: 'Сегодня вечером после обеда (так всегда в новогодние праздники) я случайно открыл дверку холодильника. Жена, как раз мыла посуду, и смеясь сказала отличную фразу: — "В Новый год мясо в холодильнике всё доели, салаты на Рождество съели, на сына День Рождения — сало с морозилки доедать будем!"',
-    tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
-    author: {displayName: 'make', photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'},
-    date: '11.11.2020, 20:54:00',
-    like: 15,
-    comments: 20,
-  },
-  {
-    title: 'Заголовок поста2',
-    text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
-    tags: ['свежее', 'новое', 'мое', 'случайность'],
-    author: {displayName: 'Kate', photo: 'https://mp3klab.ru/img.php?aHR0cHM6Ly9pLnl0aW1nLmNvbS92aS9aTUV1cGIxMl82WS9ocWRlZmF1bHQuanBn.jpg'},
-    date: '10.11.2020, 20:54:00',
-    like: 45,
-    comments: 12,
-  },
-  {
-    title: 'Заголовок поста3',
-    text: 'Далеко-далеко за словесными горами в стране гласных и согласных живут рыбные тексты. Языком что рот маленький реторический вершину текстов обеспечивает гор свой назад решила сбить маленькая дорогу жизни рукопись ему букв деревни предложения, ручеек залетают продолжил парадигматическая? Но языком сих пустился, запятой своего его снова решила меня вопроса моей своих пояс коварный, власти диких правилами напоивший они текстов ipsum первуюподпоясал? Лучше, щеке подпоясал приставка большого курсивных на берегу своего? Злых, составитель агентство что вопроса ведущими о решила одна алфавит!',
-    tags: ['свежее', 'новое', 'горячее', 'мое', 'случайность'],
+    tags: ['мое'],
     author: {displayName: 'make', photo: 'https://i.pinimg.com/originals/dc/43/51/dc435102bcfd9f84c27a433f47a50776.jpg'},
     date: '11.11.2020, 20:54:00',
     like: 15,
@@ -156,27 +220,32 @@ allPosts: [
 ],
 addPost(title, text, tags, handler) {
 
+  const user = firebase.auth().currentUser;
+
   this.allPosts.unshift({
+    id: `postID${(+new Date()).toString(16)}-${user.uid}`,
     title,
     text,
     tags: tags.split(',').map(item => item.trim()),
     author: {
       displayName:setUsers.user.displayName,
-      photo: setUsers.user.photo,
+      photo: setUsers.user.photoURL,
     },
     date: new Date().toLocaleString(),
     like: 0,
     comments: 0,
-
   })
   
-  if(handler) {
-    handler();
+  firebase.database().ref('post').set(this.allPosts)
+    .then(() => this.getPosts(handler))
+    
+ },
+ getPosts(handler) {
+   firebase.database().ref('post').on('value', snapshot => {
+     this.allPosts = snapshot.val() || [];
+     handler();
+   })
   }
-}
-
-
-
 };
 
 const toggleAuthDom = () => {
@@ -187,7 +256,7 @@ const toggleAuthDom = () => {
     loginElem.style.display = 'none';
     userElem.style.display = '';
     userNameElem.textContent = user.displayName;
-    userAvatarElem.src = user.photo ? user.photo : userAvatarElem.src;
+    userAvatarElem.src = user.photoURL || defaultPhoto;
     buttonNewPost.classList.add('visible');
   } else {
     loginElem.style.display = '';
@@ -253,7 +322,7 @@ const showAllPosts = () => {
               <a href="#" class="author-username">${author.displayName}</a>
               <span class="post-time">${date}</span>
             </div>
-            <a href="#" class="author-link"><img src=${author.photo || "img/avatar.jpeg"} alt="avatar" class="author-avatar"></a>
+            <a href="#" class="author-link"><img src=${author.photo || "img/avatar3.jpg"} alt="avatar" class="author-avatar"></a>
           </div>
         </div>
       </section>
@@ -299,7 +368,7 @@ const init = () => {
   
   exitElem.addEventListener('click', event => {
   event.preventDefault();
-  setUsers.logOut(toggleAuthDom);
+  setUsers.logOut();
   
   });
   
@@ -344,13 +413,11 @@ menuToggle.addEventListener('click', function (event) {
     
   });
 
-  showAllPosts();
-  toggleAuthDom();
+  setUsers.initUser(toggleAuthDom)
+  setPosts.getPosts(showAllPosts)
+  
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   init();
 })
-
-
-
