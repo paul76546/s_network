@@ -198,6 +198,15 @@ firebase.auth()
   //authorizedUser(user) {
   //  this.user = user;
   //}
+  sendForget(email) {
+      firebase.auth().sendPasswordResetEmail(email)
+      .then(() => {
+        alert('Письмо отправлено,прочтите и установите новый пароль')
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
 };
 
 //функция входа будет в консоли 'вход',если вызвать фукциювыхода будет выход и т.д.
@@ -205,6 +214,15 @@ firebase.auth()
 //setUsers.logIn();
 //setUsers.signIn();
 //setUsers.logOut();
+
+const loginForget = document.querySelector('.login-forget');
+
+loginForget.addEventListener('click', event => {
+  event.preventDefault();
+  setUsers.sendForget(emailInput.value);
+  emailInput.value = '';
+})
+
 
 const setPosts = {
 allPosts: [
