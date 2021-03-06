@@ -33,7 +33,25 @@ position: relative;
 }
 
 .btn-prev, .btn-next {
+    text-decoration: none;
     background-color:powderblue;
+    font-size: 15px;
+    padding: 10px 10px;
+    color:black;
+    border-radius: 100px;
+    border: 1px solid black;
+}
+
+.btn-prev, .btn-next {
+    outline: none;
+}
+
+.btn-prev:hover {
+    background-color:rgba(32, 178, 171, 0.876);
+}
+
+.btn-next:hover {
+    background-color:rgba(32, 178, 171, 0.876);
 }
 
 @media (max-width: 530px) {
